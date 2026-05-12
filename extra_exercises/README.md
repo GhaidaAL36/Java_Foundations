@@ -1,6 +1,6 @@
-* SumOfArray Project
+# SumOfArray Project
 
-*** Overview:
+### Overview:
 
 This is a simple Java console application that allows the user to:
 
@@ -9,7 +9,7 @@ This is a simple Java console application that allows the user to:
 3. Display the array
 4. Calculate the sum of all elements in the array
 
-*** Covered:
+### Covered:
 
 1. Arrays in Java
 2. Scanner Input Handling
