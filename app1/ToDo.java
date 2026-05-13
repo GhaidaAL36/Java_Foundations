@@ -1,5 +1,8 @@
 package app1;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -7,6 +10,7 @@ public class ToDo {
 
     Scanner scanner;
 
+    // I created task class to manage the task
     static class Task {
         String name;
         boolean completed;
@@ -17,10 +21,13 @@ public class ToDo {
         }
     }
 
+    // constructor to pass the scanner
     public ToDo(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    // add task - first it checks if it's already exists
+    // if not it will be added successfully
     public void addTask(ArrayList<Task> list) {
         System.out.println("Enter task:");
         String name = scanner.nextLine();
@@ -36,6 +43,7 @@ public class ToDo {
         System.out.println(name + " added to the list");
     }
 
+    // it will check completed to put mark it was completed
     public void showList(ArrayList<Task> list) {
         if (list.isEmpty()) {
             System.out.println("Your list is empty");
@@ -105,11 +113,55 @@ public class ToDo {
         }
     }
 
+
+    public void saveToFile(ArrayList<Task> list) {
+        try (FileWriter writer = new FileWriter("todo.txt")) {
+
+            for (Task t : list) {
+                writer.write(t.name + "|" + t.completed + "\n");
+            }
+
+            System.out.println("List saved to file");
+
+        } catch (IOException e) {
+            System.out.println("Error saving file");
+        }
+    }
+
+    public void loadFromFile(ArrayList<Task> list) {
+        try {
+            File file = new File("todo.txt");
+            if (!file.exists()) return;
+
+            Scanner fileScanner = new Scanner(file);
+
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split("\\|");
+
+                if (parts.length != 2) continue;
+
+                Task t = new Task(parts[0]);
+                t.completed = Boolean.parseBoolean(parts[1]);
+
+                list.add(t);
+            }
+
+            fileScanner.close();
+
+        } catch (IOException e) {
+            System.out.println("Error loading file");
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Task> toDoList = new ArrayList<>();
 
         ToDo todo = new ToDo(scanner);
+
+        todo.loadFromFile(toDoList);
         todo.showMenu(toDoList);
+        todo.saveToFile(toDoList);
     }
 }
