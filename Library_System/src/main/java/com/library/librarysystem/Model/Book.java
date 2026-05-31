@@ -7,7 +7,7 @@ public class Book {
     private UUID id = UUID.randomUUID();
     private String title;
     private String author;
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     public Book(String title, String author, boolean isAvailable) {
         this.title = title;
