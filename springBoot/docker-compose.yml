@@ -1,0 +1,22 @@
+services:
+  db:
+    container_name: postgres-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ghaida
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db1
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
