@@ -6,10 +6,12 @@ import com.ghaida.employee.dto.EmployeeResponseDTO;
 import com.ghaida.employee.service.EmployeeService;
 import com.ghaida.employee.wrapper.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
@@ -30,8 +32,11 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> findAll() {
-        return ResponseEntity.ok(ApiResponse.success(employeeService.getAllEmployees()));
+    public ResponseEntity<ApiResponse<Page<EmployeeResponseDTO>>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(ApiResponse.success(employeeService.getAllEmployees(pageable)));
     }
 
     @GetMapping("/{id}")

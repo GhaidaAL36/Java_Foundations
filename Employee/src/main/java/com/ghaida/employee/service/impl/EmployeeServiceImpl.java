@@ -10,6 +10,8 @@ import com.ghaida.employee.repository.DepartmentRepository;
 import com.ghaida.employee.repository.EmployeeRepository;
 import com.ghaida.employee.service.EmployeeService;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -34,11 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return toResponse(savedEmployee);
     }
 
-    public List<EmployeeResponseDTO> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeResponseDTO> employeesDTO = employees.stream().map(this::toResponse).toList();
-
-        return employeesDTO;
+    public Page<EmployeeResponseDTO> getAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable).map(this::toResponse);
     }
 
     public EmployeeResponseDTO getEmployeeById(Integer id) {

@@ -2,14 +2,16 @@ package com.ghaida.employee.controller;
 
 import com.ghaida.employee.dto.DepartmentRequestDTO;
 import com.ghaida.employee.dto.DepartmentResponseDTO;
-import com.ghaida.employee.repository.DepartmentRepository;
 import com.ghaida.employee.service.DepartmentService;
 import com.ghaida.employee.wrapper.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
@@ -29,8 +31,12 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<DepartmentResponseDTO>>> getAllDepartments() {
-        return ResponseEntity.ok(ApiResponse.success(departmentService.getAllDepartments()));
+    public ResponseEntity<ApiResponse<Page<DepartmentResponseDTO>>> getAllDepartments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(ApiResponse.success(departmentService.getAllDepartments(pageable)));
     }
 
     @GetMapping("/{id}")

@@ -7,7 +7,8 @@ import com.ghaida.employee.exception.DepartmentNotFoundException;
 import com.ghaida.employee.repository.DepartmentRepository;
 import com.ghaida.employee.service.DepartmentService;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 
@@ -28,11 +29,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         return toResponse(department);
     }
 
-    public List<DepartmentResponseDTO> getAllDepartments() {
-        List<Department> departments = departmentRepository.findAll();
-        List<DepartmentResponseDTO> departmentResponseDTOS = departments.stream().map(this::toResponse).toList();
-
-        return departmentResponseDTOS;
+    public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
+        return departmentRepository.findAll(pageable).map(this::toResponse);
     }
 
     public DepartmentResponseDTO getDepartmentById(Integer id) {

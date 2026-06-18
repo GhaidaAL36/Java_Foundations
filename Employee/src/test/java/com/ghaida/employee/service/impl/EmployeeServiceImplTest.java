@@ -12,7 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +71,7 @@ class EmployeeServiceImplTest {
 
     @Test
     void getAllEmployees() {
+        Pageable pageable = PageRequest.of(0, 10);
         Employee employee = new Employee();
         employee.setId(1);
         employee.setName("Ghaida");
@@ -80,12 +84,12 @@ class EmployeeServiceImplTest {
         department.setDepartmentName("Engineering");
         employee.setDepartment(department);
 
-        when(employeeRepository.findAll()).thenReturn(List.of(employee));
+        when(employeeRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(employee)));
 
-        List<EmployeeResponseDTO> response = employeeServiceImpl.getAllEmployees();
+        Page<EmployeeResponseDTO> response = employeeServiceImpl.getAllEmployees(pageable);
 
-        assertEquals(1, response.size());
-        assertEquals("Ghaida", response.get(0).getName());
+        assertEquals(1, response.getContent().size());
+        assertEquals("Ghaida", response.getContent().get(0).getName());
     }
 
     @Test
