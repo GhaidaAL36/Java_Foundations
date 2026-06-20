@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class DepartmentResponseDTO {
 
-    private int departmentId;
+    private Integer departmentId;
     private String departmentName;
     private int employeeCount;
 
